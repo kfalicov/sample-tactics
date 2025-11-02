@@ -1,20 +1,18 @@
 import * as ex from "excalibur";
-import { Board } from "./board";
-import {HighlightAnimation, RedHighlightAnimation, Resources, TerrainSpriteSheet} from "./resources";
-import { BOARD_OFFSET, SCALE } from "./config";
-import { PathNodeComponent } from "./path-finding/path-node-component";
-import { Unit } from "./unit";
-import {vector} from "excalibur/build/dist/Util/DrawUtil";
-import {Vector} from "excalibur";
+import {Board} from "./board";
+import {HighlightSpriteSheet, Resources, TerrainSpriteSheet} from "./resources";
+import {SCALE} from "./config";
+import {PathNodeComponent} from "./path-finding/path-node-component";
+import {Unit} from "./unit";
 
-const RangeHighlightAnimation = HighlightAnimation.clone();
-const PathHighlightAnimation = HighlightAnimation.clone();
-const AttackHighlightAnimation = RedHighlightAnimation.clone();
+const RangeHighlight = HighlightSpriteSheet.sprites[0].clone();
+const PathHighlight = HighlightSpriteSheet.sprites[1].clone();
+const AttackHighlight = HighlightSpriteSheet.sprites[2].clone();
 
 export enum Terrain {
     Grass = 'G',
     Water = 'W',
-    Sand  = 'S',
+    Sand = 'S',
     Stone = 'T'
 }
 
@@ -46,7 +44,7 @@ export class Cell extends ex.Actor {
         this.addChild(this.decoration);
 
         this.cursor = new ex.Actor({
-            pos:ex.vec(board.tileWidth/2, board.tileHeight/2-1).scale(SCALE),
+            pos: ex.vec(board.tileWidth / 2, board.tileHeight / 2 - 1).scale(SCALE),
         });
         this.addChild(this.cursor);
 
@@ -54,33 +52,33 @@ export class Cell extends ex.Actor {
         this.addComponent(this.pathNode);
 
         this.terrain = Terrain.Grass;
-        this.graphics.offset=ex.vec(0,-16);
+        this.graphics.offset = ex.vec(0, -16);
 
-        RangeHighlightAnimation.scale = SCALE;
-        RangeHighlightAnimation.opacity = 0.75;
-        PathHighlightAnimation.scale = SCALE;
-        PathHighlightAnimation.opacity = 0.75;
-        PathHighlightAnimation.tint = ex.Color.Green;
-        AttackHighlightAnimation.scale = SCALE;
-        AttackHighlightAnimation.opacity = 0.75;
-        this.decoration.graphics.add('range', RangeHighlightAnimation);
-        this.decoration.graphics.add('path', PathHighlightAnimation);
-        this.decoration.graphics.add('attack', AttackHighlightAnimation);
+        RangeHighlight.scale = SCALE;
+        PathHighlight.scale = SCALE;
+        AttackHighlight.scale = SCALE;
 
-        this.cursor.actions.repeatForever((ctx)=>{
-            ctx.scaleTo(ex.vec(1.05,1.05),ex.vec(0.75,0.75))
+        this.decoration.graphics.add('range', RangeHighlight);
+        this.decoration.graphics.add('path', PathHighlight);
+        this.decoration.graphics.add('attack', AttackHighlight);
+        this.decoration.actions.repeatForever((ctx) => {
+            ctx.fade(0.4, 700).delay(300).fade(0.6, 700).delay(300)
+        })
+
+        this.cursor.actions.repeatForever((ctx) => {
+            ctx.scaleTo(ex.vec(1.05, 1.05), ex.vec(0.75, 0.75))
                 .delay(200)
-                .scaleTo(ex.vec(1,1),ex.vec(0.75,0.75))
+                .scaleTo(ex.vec(1, 1), ex.vec(0.75, 0.75))
                 .delay(200)
         })
         const myNineSlice = new ex.NineSlice({
-            width:board.tileWidth+4,height:board.tileHeight+5,
+            width: board.tileWidth + 4, height: board.tileHeight + 5,
             source: Resources.SelectionSprite,
-            sourceConfig:{
+            sourceConfig: {
                 width: 16,
-                height:16,
-                leftMargin:7, rightMargin:7,
-                topMargin:7, bottomMargin:7,
+                height: 16,
+                leftMargin: 7, rightMargin: 7,
+                topMargin: 7, bottomMargin: 7,
             },
             destinationConfig: {
                 drawCenter: false,
@@ -98,7 +96,7 @@ export class Cell extends ex.Actor {
 
     set terrain(terrain: Terrain) {
         this._terrain = terrain;
-        switch(this.terrain) {
+        switch (this.terrain) {
             case Terrain.Grass:
                 this.sprite = TerrainSpriteSheet.sprites[ex.randomIntInRange(0, 1)];
                 break;

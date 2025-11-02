@@ -80,40 +80,6 @@ export const HighlightSpriteSheet = ex.SpriteSheet.fromImageSource({
         spriteWidth: 32
     }
 });
-export const RedHighlightSpriteSheet = ex.SpriteSheet.fromImageSource({
-    image: Resources.RedHighlightSheet,
-    grid: {
-        rows: 1,
-        columns: 5,
-        spriteHeight: 32,
-        spriteWidth: 32
-    }
-});
-
-export const HighlightAnimation = ex.Animation.fromSpriteSheetCoordinates({
-    spriteSheet: HighlightSpriteSheet,
-    strategy: ex.AnimationStrategy.Loop,
-    frameCoordinates: [
-        {x: 0, y: 0, duration: 100 },
-        {x: 1, y: 0, duration: 100 },
-        {x: 2, y: 0, duration: 100 },
-        {x: 3, y: 0, duration: 100 },
-        {x: 4, y: 0, duration: 100 },
-    ]
-});
-
-export const RedHighlightAnimation = ex.Animation.fromSpriteSheetCoordinates({
-    spriteSheet: RedHighlightSpriteSheet,
-    strategy: ex.AnimationStrategy.Loop,
-    frameCoordinates: [
-        {x: 0, y: 0, duration: 100 },
-        {x: 1, y: 0, duration: 100 },
-        {x: 2, y: 0, duration: 100 },
-        {x: 3, y: 0, duration: 100 },
-        {x: 4, y: 0, duration: 100 },
-    ]
-})
-
 
 export const SpiderSpriteSheet = ex.SpriteSheet.fromImageSource({
     image: Resources.SpiderSheet,
